@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.preprocessing import StandardScaler
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split # Fix 1: Changed 'cross_validation' to 'model_selection'
 from sklearn.utils import shuffle
 
 '''0 = air_conditioner
@@ -35,7 +35,7 @@ def parse_audio_files(parent_dir,sub_dirs,file_ext='*.wav'):
     ignored = 0
     features, labels, name = np.empty((0,161)), np.empty(0), np.empty(0)
     for label, sub_dir in enumerate(sub_dirs):
-        print sub_dir
+        print(sub_dir) # Fix 2: Add brackets
         for fn in glob.glob(os.path.join(parent_dir, sub_dir, file_ext)):
             try:
                 mfccs, chroma, mel, contrast, tonnetz = extract_features(fn)
@@ -43,12 +43,12 @@ def parse_audio_files(parent_dir,sub_dirs,file_ext='*.wav'):
                 features = np.vstack([features,ext_features])
                 l = [fn.split('-')[1]] * (mfccs.shape[0])
                 labels = np.append(labels, l)
-	    except (KeyboardInterrupt, SystemExit):
-		raise
+            except (KeyboardInterrupt, SystemExit):
+                raise
             except:
                 ignored += 1
-    print "Ignored files: ", ignored
-    return np.array(features), np.array(labels, dtype = np.int)
+    print("Ignored files: ", ignored) # Fix 3: Add brackets
+    return np.array(features), np.array(labels, dtype=np.int)
 
 def one_hot_encode(labels):
     n_labels = len(labels)
@@ -70,9 +70,9 @@ except:
     print("Extracting features...")
     features, labels = parse_audio_files(parent_dir,sub_dirs)
     with open('features.npy', 'wb') as f1:
-	    np.save(f1,features)
+        np.save(f1,features)
     with open('labels.npy', 'wb') as f2:
-	    np.save(f2, labels)
+        np.save(f2, labels)
 
 labels = one_hot_encode(labels)
 
@@ -137,7 +137,7 @@ with tf.Session() as sess:
     sess.run(init)
     for epoch in range(training_epochs):
         if stopping == 0:
-            total_batch = (train_x.shape[0] / batch_size)
+            total_batch = (train_x.shape[0] // batch_size) # Fix 4: Changed / to //
             train_x = shuffle(train_x, random_state=42)
             train_y = shuffle(train_y, random_state=42)
             for i in range(total_batch):
@@ -147,13 +147,13 @@ with tf.Session() as sess:
                 _, cost = sess.run([optimizer, cost_function], feed_dict={X: batch_x, Y: batch_y})
             cost_history = np.append(cost_history, cost)
             if epoch % 100 == 0:
-                print "Epoch: ", epoch, " cost ", cost
+                print("Epoch: ", epoch, " cost ", cost) # Fix 5: Add brackets
             if epoch > 0 and abs(cost_history[epoch-1] - cost_history[epoch]) > min_delta:
                 patience_cnt = 0
             else:
                 patience_cnt += 1
             if patience_cnt > patience:
-                print "Early stopping at epoch ", epoch, ", cost ", cost
+                print("Early stopping at epoch ", epoch, ", cost ", cost) # Fix 6: Add brackets
                 stopping = 1
 
     y_pred = sess.run(tf.argmax(y_,1),feed_dict={X: test_x})
@@ -163,13 +163,6 @@ with tf.Session() as sess:
     print("Model saved at: %s" % save_path)
 
 p,r,f,s = precision_recall_fscore_support(y_true, y_pred)#average='micro')
-print ("F-Score:"), f
-print ("Precision:"), p
-print ("Recall:"), r
-
-
-
-
-
-
-
+print("F-Score:", f) # Fix 7: Add brackets
+print("Precision:", p) # Fix 8: Add brackets
+print("Recall:", r) # Fix 9: Add brackets

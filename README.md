@@ -2,19 +2,61 @@
 
 ![alt text](https://raw.githubusercontent.com/GianlucaPaolocci/Sound-classification-on-Raspberry-Pi-with-Tensorflow/master/img/Immagine.png)
 
-#  BUILD THE PROJECT
+##  BUILD THE PROJECT
 
-  The project is developed and tested with Python 2.7.
+  ~~The project is developed and tested with Python 2.7.~~ <br>
+  The project has been updated to work with Python 3.7.
 
-  Install following Python libraries on your PC/Workstation and Raspberry Pi:
-  
-    Tensorflow, Scikit-learn, Librosa
-  
-  Install following library on your Raspberry only:
-  
-    Sounddevice
-  
+  ### Required Packages
+  - TensorFlow (1.14.0)
+  - Scikit-learn
+  - Librosa
+  - Sounddevice
 
+  ### Installation on PC (PyCharm)
+  1. Use PyCharm to create a new virtual environment
+  2. Search and install the required libraries mentioned above
+  
+  ### Installation on Raspberry Pi
+  1. Install numpy globally: <br>
+  `sudo apt-get install python3-numpy`
+
+
+  2. Install scipy globally: <br>
+  `sudo apt-get install python3-scipy` <br>
+  *Note: `pip3 install -U scikit-learn` doesn't work
+
+
+  3. Create a virtual env: <br>
+  `python3 -m venv ac-env`
+
+
+  4. Activate the virtual env: <br>
+  `source ac-env/bin/activate`
+
+
+  5. Allow venv to see all global packages using the system-site-packages option: <br>
+  `virtualenv --system-site-packages -p python3 ./ac-env`
+
+
+  6. Install TensorFlow: <br>
+  `pip3 install tensorflow`
+
+
+  7. Install Librosa: <br>
+  `sudo apt-get install llvm` <br>
+  `LLVM_CONFIG=/usr/bin/llvm-config pip3 install llvmlite==0.32` <br>
+  `#pip3 install numpy` <br>
+  `pip3 install numba==0.49` <br>
+  `pip3 install librosa`
+
+
+  8. Install sounddevice: <br>
+  `sudo apt-get install libportaudio2` <br>
+  `sudo apt-get install libatlas-base-dev` <br>
+  `pip3 install sounddevice`
+  
+### Steps
 1. **DOWNLOAD UrbanSound8K DATASET**
 
   https://serv.cusp.nyu.edu/projects/urbansounddataset/urbansound8k.html
